@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TODO 목록 앱</title>
+    <title>Todo 목록 앱</title>
 
     <!-- 부트스트랩을 불러오기 위한 link 코드 -->
     <link
@@ -14,27 +14,38 @@
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/boot-strap-icons.css">
     
 </head>
+
 <body>
-    <div class="container">
+    <div class="container"> <!-- Bootstrap 공식 문서에서 미리 정의한 스타일 중에서 내가 원하는 스타일의 class를 각 태그에 적용시킴 -->
         <h1>TODO 목록 앱</h1>
         <p>
-            <a href=""><i class="bi-plus"></i>+ Add Todo</a>
-            <a href="" class="btn btn-primary" style="float:right">완료한 TODO 목록</a>
+
+            <!-- 템플릿 언어로 'Add todo' 클릭을 통한 페이지 이동(todo_post.html으로) 구현 -->
+            <a href="{% url 'todo_post' %}"><i class="bi-plus"></i>+ Add todo</a>
+            <!-- 템플릿 언어로 '완료한 TODO 목록' 클릭을 통한 페이지 이동(todo_post.html으로) 구현 -->
+            <a href="{% url 'done_list' %}" class="btn btn-primary" style="float:right">완료한 TODO 목록</a>
         </p>
         <ul class="list-group">
+            
+            <!-- 템플릿 반복문: 뷰에서 todos를 넘겨받아 반복문으로 각 todo의 제목, 중요도, 완료, 수정 기능을 한 줄로 표현 -->
             {% for todo in todos %}
             <li class="list-group-item">
-                <a href="">{{ todo.title }}</a>
+                                                            <!-- 
+                                                            : {{ 변수 }}
+                                                            뷰에서 todo 객체를 html로 보내 title 속성(todo 제목)을 출력하도록 함 -->
+                <a href="{% url 'todo_detail' pk=todo.pk %}">{{ todo.title }}</a> <!-- 메인 페이지에서 todo 제목을 누르면 상세 페이지로 이동하도록 코드 작성 -->
+
+                <!-- 템플릿 조건문 -->
                 {% if todo.important %}
                     <span class="badge badge-danger">!</span>
-                {% endif %}
-                <div style="float:right;">
-                    <a href="" class="btn btn-danger">완료</a>
-                    <a href="" class="btn btn-outline-primary">수정하기</a>
-                </div>
+                {% endif %}  
+                <div style="float:right">
+                    <a href="{% url 'todo_done' pk=todo.pk %}" class="btn btn-danger">완료</a>
+                    <a href="{% url 'todo_edit' pk=todo.pk %}" class="btn btn-outline-primary">수정하기</a>
+                </div>  
             </li>
             {% endfor %}
         </ul>
+    </body>
     </div>
-</body>
 </html>
